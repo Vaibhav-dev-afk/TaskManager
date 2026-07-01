@@ -32,11 +32,11 @@ mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('Successfully connected to Mongodb Atlas!'))
     .catch((error) => console.log('Database connection is failed:', error));
 
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./Routes/authRoutes');
 const userRoutes = require('./Routes/userRoutes');
 const projectRoutes = require('./Routes/projectRoutes');
 const taskRoutes = require('./Routes/taskRoutes')
-const dashboardRoutes = require('./routes/dashboardRoutes');
+const dashboardRoutes = require('./Routes/dashboardRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users',userRoutes);
