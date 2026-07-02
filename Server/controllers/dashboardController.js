@@ -3,8 +3,8 @@ const Project = require('../models/Project');
 
 exports.getDashboardstats = async(req ,res ) => {
     try{
-        const userProjects = await Project.findOne({
-            $or: [{ owner: req.user._id},{'member.user': req.user._id}]
+        const userProjects = await Project.find({
+            $or: [{ owner: req.user._id},{'members.user': req.user._id}]
         });
 
         const projectIds = userProjects.map(project => project._id);
@@ -21,17 +21,17 @@ exports.getDashboardstats = async(req ,res ) => {
         ]);
 
         const formattedstats = {
-            todo: 0,
+            'to-do': 0,
             inprogress: 0,
-            done: 0,
-            totalProjects: 0,
+            completed: 0,
+            totalProjects: userProjects.length,
         };
 
         taskStats.forEach(stat => {
-            formattedStats[stat._id] = stat.count;
+            formattedstats[stat._id] = stat.count;
         });
 
-        res.status(200).json(formattedStats);
+        res.status(200).json(formattedstats);
     }
     catch(error){
         res.status(500).json({ message: "Servor error ", error: error.message });

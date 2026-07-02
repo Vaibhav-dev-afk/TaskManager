@@ -2,7 +2,7 @@ const User = require('../models/User');
 
 exports.getMe = async(req,res) => {
     try{
-        res.status(201).json(req,res);
+        res.status(200).json(req.user);
     }
     catch(error){
         res.status(500).json({message: "Server error", error: error.message});
@@ -13,7 +13,7 @@ exports.updateMe = async(req,res) => {
     try{
         const{ name, bio ,avatar } = req.body;
 
-        const updateUser = await User.findbyIdAndUpdate(
+        const updatedUser = await User.findByIdAndUpdate(
             req.user._id,
             { name, bio, avatar },
             { new: true, runValidators: true }

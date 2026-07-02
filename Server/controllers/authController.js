@@ -7,7 +7,7 @@ exports.register = async (req,res) => {
     try{
         const { name,email,password } = req.body;
 
-        let user = await User.FindOne({ email });
+        let user = await User.findOne({ email });
         if(user){
             return res.status(400).json({message: "User already exists"});
         }
@@ -15,7 +15,7 @@ exports.register = async (req,res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        user = new user({
+        user = new User({
             name,
             email,
             password: hashedPassword
@@ -34,7 +34,7 @@ exports.login = async (req,res) => {
     try{
         const{email , password} = req.body;
 
-        const user = await User.FindOne({email});
+        const user = await User.findOne({email});
         if(!user){
             return res.status(400).json({message: "Invalid email or password"});
         }
@@ -52,7 +52,8 @@ exports.login = async (req,res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000 
         })
         res.status(200).json({

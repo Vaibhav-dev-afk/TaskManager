@@ -21,10 +21,14 @@ exports.createTask = async (req, res) => {
             project: projectId, 
             assignedTo,        
             priority,
-            dueDate
+            duedate: dueDate
         });
 
         await task.save();
+
+        const io = req.app.get('io');
+        io?.to(projectId).emit('taskCreated', task);
+
         res.status(201).json(task);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
@@ -76,7 +80,7 @@ exports.updateTask = async (req, res) => {
 
         const io = req.app.get('io');
 
-        io.to(task.project.toString()).emit('taskUpdated', updatedTask);
+        io?.to(task.project.toString()).emit('taskUpdated', updatedTask);
 
         res.status(200).json(updatedTask);
     } catch (error) {
@@ -99,6 +103,10 @@ exports.deleteTask = async (req, res) => {
         if (!project) return res.status(403).json({ message: "Not authorized to delete this task" });
 
         await Task.findByIdAndDelete(taskId);
+
+        const io = req.app.get('io');
+        io?.to(task.project.toString()).emit('taskDeleted', { taskId, projectId: task.project.toString() });
+
         res.status(200).json({ message: "Task deleted successfully" });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
