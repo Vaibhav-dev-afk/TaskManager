@@ -1,6 +1,6 @@
-# DevCollab — Real-Time Task & Project Manager
+# TaskManager — Real-Time Task & Project Manager
 
-DevCollab is a collaborative, production-ready project management application designed for agile teams. Built completely on a unified JavaScript architecture (MERN stack), this platform facilitates seamless project delegation, data isolation, and dynamic updates without requiring page refreshes.
+TaskManager is a collaborative, production-ready project management application designed for agile teams. Built completely on a unified JavaScript architecture (MERN stack), this platform facilitates seamless project delegation, data isolation, and dynamic updates without requiring page refreshes.
 
 ## 👥 Engineering & Collaboration
 This project was conceptualized, designed, and architected end-to-end as a joint full-stack initiative. While execution was specialized to optimize parallel development workflows, both engineers maintained total architectural oversight of the entire system stack:
