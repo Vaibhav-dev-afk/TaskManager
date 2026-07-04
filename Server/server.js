@@ -24,7 +24,7 @@ app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('Successfully connected to MongoDB Atlas!'))
     .catch((error) => console.log('Database connection failed:', error));
 
