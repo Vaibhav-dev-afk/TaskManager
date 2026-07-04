@@ -6,6 +6,9 @@ const http = require('http');
 const { Server } = require('socket.io');
 require('dotenv').config();
 
+const { setServers } = require('node:dns/promises');
+setServers(['1.1.1.1', '8.8.8.8']);
+
 const app = express();
 const server = http.createServer(app);
 
