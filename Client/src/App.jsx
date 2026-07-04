@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
+import ProjectView from './pages/ProjectView';
+import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import useAuthStore from './store/useAuthStore';
@@ -22,6 +24,8 @@ export default function App() {
                     <Route element={<Layout />}>
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/projects" element={<Projects />} />
+                        <Route path="/projects/:id" element={<ProjectView />} />
+                        <Route path="/profile" element={<Profile />} />
                         <Route path="/" element={<Navigate to="/dashboard" replace />} />
                     </Route>
                 </Route>
