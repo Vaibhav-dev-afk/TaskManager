@@ -14,11 +14,24 @@ exports.getDashboardStats = async (req, res) => {
             { $group: { _id: "$status", count: { $sum: 1 } } }
         ]);
 
+        const overdueCount = await Task.countDocuments({
+            project: { $in: projectIds },
+            status: { $ne: 'done' },
+            dueDate: { $lt: new Date() }
+        });
+
+        const myTasks = await Task.find({
+            assignedTo: req.user._id,
+            status: { $ne: 'done' }
+        }).populate('project', 'title').sort({ dueDate: 1 }).limit(5);
+
         const formattedStats = {
             todo: 0,
             inprogress: 0,
             done: 0,
-            totalProjects: userProjects.length
+            overdue: overdueCount,
+            totalProjects: userProjects.length,
+            recentTasks: myTasks
         };
 
         taskStats.forEach(stat => {

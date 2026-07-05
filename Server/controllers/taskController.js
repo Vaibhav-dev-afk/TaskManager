@@ -75,3 +75,27 @@ exports.updateTask = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+exports.deleteTask = async (req, res) => {
+    try {
+        const taskId = req.params.id;
+        const task = await Task.findById(taskId);
+        
+        if (!task) return res.status(404).json({ message: 'Task not found' });
+
+        const project = await Project.findOne({
+            _id: task.project,
+            $or: [{ owner: req.user._id }, { 'members.user': req.user._id }]
+        });
+
+        if (!project) return res.status(403).json({ message: 'Not authorized' });
+
+        await Task.findByIdAndDelete(taskId);
+
+        const io = req.app.get('io');
+        io.to(task.project.toString()).emit('taskDeleted', taskId);
+
+        res.status(200).json({ message: 'Task deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

@@ -8,6 +8,20 @@ exports.getMe = async (req, res) => {
     }
 };
 
+exports.updateProfile = async (req, res) => {
+    try {
+        const { name, bio } = req.body;
+        const user = await User.findByIdAndUpdate(
+            req.user._id,
+            { name, bio },
+            { new: true, runValidators: true }
+        ).select('-password');
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 exports.uploadAvatar = async (req, res) => {
     try {
         if (!req.file) {
